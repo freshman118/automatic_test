@@ -1,13 +1,39 @@
 # -*- coding: utf-8 -*-
 import copy
-
-import cv2
-import numpy
 from PIL import Image
 from PIL.BmpImagePlugin import BmpImageFile
 from PIL.PngImagePlugin import PngImageFile
 
+import cv2
+import numpy
+import aiohttp
+import asyncio
+
 from backend.core.lib import pic
+
+
+class Client:
+
+    def __init__(self, url=r'http://127.0.0.1:8081'):
+        self._url = url
+
+    async def fetch(self, session, url):
+        async with session.get(url) as response:
+            return await response.text()
+
+    async def main(self):
+        async with aiohttp.ClientSession() as session:
+            html = await self.fetch(session, self._url)
+            print(html)
+
+    def start(self):
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(self.main())
+
+    def _send_request(self, data):
+        import requests
+        session = requests.Session()
+        return session.post(self._url, json=data).json()
 
 
 class ClientApi:
@@ -134,9 +160,8 @@ def demo():
     # cv.drawContours(img, contours, -1, (0, 255, 0), 1)
     # cnt = contours[4]
 
-def demo2():
-    pass
-
 
 if __name__ == '__main__':
-    demo()
+    client = Client()
+    payload = {"cmd": "GET_CONFIG", "xigua":123}
+    print(client._send_request('tudou'))

@@ -1,15 +1,27 @@
 # -*- coding: utf-8 -*-
+import os
 from multiprocessing import Pool, Process
 
-def f(x):
-    return x**x
 
-def n(name):
+def f(name):
+    info('function f')
     print('hello' + name)
 
+
+def info(title):
+    print(title)
+    print('module name:', __name__)
+    print('parent name:', os.getppid())
+    print('prcess id:', os.getpid())
+
+
+def test_pool():
+    with Pool(processes=5) as p:
+        p.map()
+
+
 if __name__ == '__main__':
-    # with Pool(5) as p:
-    #     print(p.map(f, [1, 2, 3]))
-    p = Process(target=n, args=('JackC',))
+    info('main line')
+    p = Process(target=f, args=('JackC',))
     p.start()
-    p.join(1)
+    p.join()

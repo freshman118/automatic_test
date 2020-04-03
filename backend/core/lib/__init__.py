@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from backend.core.base import client
+from backend.core.lib import pic
 
-api = client.ClientApi('http://localhost:8080')
+image_process = client.ImageProcess('http://localhost:8080', pic.pic1)
 
 
 class Config:
